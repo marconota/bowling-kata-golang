@@ -11,10 +11,15 @@ type BowlingGame struct {
     score int
 }
 
-func (b *BowlingGame) Roll(i int) error {
-    return fmt.Errorf("error")
+func (b *BowlingGame) Roll(pins int) error {
+    if pins > 10 {
+        return fmt.Errorf("more than 10 pins are not allowed")
+    }
+
+    b.score += pins
+    return nil
 }
 
 func (b *BowlingGame) Score() int {
-    return 1
+    return b.score
 }
