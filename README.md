@@ -16,7 +16,7 @@ In the tenth frame a player who rolls a spare or strike is allowed to roll the e
 
 Write a struct `Game` that has two methods
 
-`Roll(int pins)` is called each time the player rolls a ball. The argument is the number of pins knocked down.
+`Roll(pins int)` is called each time the player rolls a ball. The argument is the number of pins knocked down.
 `Score() int` returns the total score for that game.
 
 ### How to write a test in Go
