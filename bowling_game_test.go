@@ -12,4 +12,12 @@ func TestBowlingGame(t *testing.T) {
 			t.Fail()
 		}
     })
+
+	t.Run("When we roll AND we roll a number of pin over 10 THEN error", func(t *testing.T) {
+		bowlingGame := BowlingGame{}
+
+		if bowlingGame.Roll(11) == nil {
+			t.Fail()
+		}
+	})
 }
