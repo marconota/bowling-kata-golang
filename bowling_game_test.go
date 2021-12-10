@@ -54,4 +54,18 @@ func TestBowlingGame(t *testing.T) {
 			}
 		},
 	)
+
+	t.Run(
+		"GIVEN we rolled 8 pins WHEN we roll again 3 pins in the same frame THEN error",
+		func(t *testing.T) {
+			bowlingGame := NewBowlingGame()
+
+			bowlingGame.Roll(8)
+
+			err := bowlingGame.Roll(3)
+			if err == nil {
+				t.Fail()
+			}
+		},
+	)
 }
