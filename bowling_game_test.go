@@ -47,43 +47,8 @@ func TestBowlingGame(t *testing.T) {
 		},
 	)
 
-	//t.Run(
-	//	"GIVEN a game with 1 frame WHEN we roll a strike (10 pins) THEN we can not roll again in the same frame",
-	//	func(t *testing.T) {
-	//		bowlingGame := NewBowlingGame()
-	//
-	//		bowlingGame.Roll(10)
-	//
-	//		err := bowlingGame.Roll(1)
-	//		if err == nil {
-	//			t.Fail()
-	//		}
-	//	},
-	//)
-
 	t.Run(
-		"",
-		func(t *testing.T) {
-			bowlingGame := NewBowlingGame()
-
-			if err := bowlingGame.Roll(1); err != nil {
-				t.Fail()
-			}
-			if err := bowlingGame.Roll(1); err != nil {
-				t.Fail()
-			}
-			if err := bowlingGame.Roll(1); err != nil {
-				t.Fail()
-			}
-
-			if bowlingGame.Score() != 3 {
-				t.Fail()
-			}
-		},
-	)
-
-	t.Run(
-		"When ",
+		"When we score a spare and then we score 2 on the next roll",
 		func(t *testing.T) {
 			bowlingGame := NewBowlingGame()
 
@@ -96,9 +61,11 @@ func TestBowlingGame(t *testing.T) {
 			if err := bowlingGame.Roll(2); err != nil {
 				t.Fail()
 			}
-
-			if bowlingGame.Score() != 14 {
+			if err := bowlingGame.Roll(3); err != nil {
 				t.Fail()
+			}
+			if bowlingGame.Score() != 17 {
+				t.Errorf("bowling score: %d", bowlingGame.Score())
 			}
 		},
 	)
