@@ -22,9 +22,14 @@ type BowlingGame struct {
 }
 
 type frame struct {
+	score          int
 	scoredPins     int
 	availableRolls int
 	resultType     ResultType
+}
+
+func (f *frame) Score() int {
+	return f.score
 }
 
 func (f *frame) DownedPins() int {
@@ -35,7 +40,7 @@ func (f *frame) ResultType() ResultType {
 	return f.resultType
 }
 
-func (f *frame) IncreaseScore(pins int) {
+func (f *frame) IncreaseScoredPins(pins int) {
 	f.scoredPins += pins
 }
 
@@ -84,7 +89,7 @@ func (b *BowlingGame) Roll(pins int) error {
 
 	frame := b.frames[b.currentFrameIndex]
 	frame.DecreaseAvailableRolls()
-	frame.IncreaseScore(pins)
+	frame.IncreaseScoredPins(pins)
 
 	if b.shouldDoublePoints() {
 		rollScore *= 2
@@ -124,15 +129,22 @@ func (b *BowlingGame) assertValidRoll(pins int) error {
 }
 
 func (b *BowlingGame) shouldDoublePoints() bool {
+	if b.currentFrameIndex == 0 {
+		return false
+	}
 
-	if b.currentFrameIndex != 0 &&
-		b.frames[b.currentFrameIndex-1].ResultType() == Spare &&
+	if b.frames[b.currentFrameIndex-1].ResultType() == Spare &&
 		b.frames[b.currentFrameIndex].AvailableRolls() == 1 {
 		return true
 	}
-	if b.currentFrameIndex != 0 &&
-		b.frames[b.currentFrameIndex-1].ResultType() == Strike {
+
+	if b.frames[b.currentFrameIndex-1].ResultType() == Strike {
 		return true
 	}
+
+	if b.frames[b.currentFrameIndex-1].ResultType() == Strike {
+		return true
+	}
+
 	return false
 }

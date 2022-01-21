@@ -89,4 +89,27 @@ func TestBowlingGame(t *testing.T) {
 			}
 		},
 	)
+
+	t.Run(
+		"When we score 2 consecutive strike and then we score 2 on the next roll",
+		func(t *testing.T) {
+			bowlingGame := NewBowlingGame()
+
+			if err := bowlingGame.Roll(10); err != nil {
+				t.Fail()
+			}
+			if err := bowlingGame.Roll(10); err != nil {
+				t.Fail()
+			}
+			if err := bowlingGame.Roll(2); err != nil {
+				t.Fail()
+			}
+			if err := bowlingGame.Roll(3); err != nil {
+				t.Fail()
+			}
+			if bowlingGame.Score() != 42 {
+				t.Errorf("bowling score: %d", bowlingGame.Score())
+			}
+		},
+	)
 }
