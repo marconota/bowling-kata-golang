@@ -12,7 +12,7 @@ A strike is when the player knocks down all 10 pins on his first roll. The frame
 
 In the tenth frame a player who rolls a spare or strike is allowed to roll the extra balls to complete the frame. However no more than three balls can be rolled in tenth frame.
 
-https://www.bowlinggenius.com/
+[Here](https://www.bowlinggenius.com/) you can find a visual support of the rules.
 
 ### Requirements
 
