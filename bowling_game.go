@@ -86,9 +86,7 @@ func (b *BowlingGame) Roll(pins int) error {
 	frame.DecreaseAvailableRolls()
 	frame.IncreaseScore(pins)
 
-	if b.currentFrameIndex != 0 &&
-		b.frames[b.currentFrameIndex-1].ResultType() == Spare &&
-		b.frames[b.currentFrameIndex].AvailableRolls() == 1 {
+	if b.shouldDoublePoints() {
 		rollScore *= 2
 	}
 
@@ -123,4 +121,18 @@ func (b *BowlingGame) assertValidRoll(pins int) error {
 	}
 
 	return nil
+}
+
+func (b *BowlingGame) shouldDoublePoints() bool {
+
+	if b.currentFrameIndex != 0 &&
+		b.frames[b.currentFrameIndex-1].ResultType() == Spare &&
+		b.frames[b.currentFrameIndex].AvailableRolls() == 1 {
+		return true
+	}
+	if b.currentFrameIndex != 0 &&
+		b.frames[b.currentFrameIndex-1].ResultType() == Strike {
+		return true
+	}
+	return false
 }
