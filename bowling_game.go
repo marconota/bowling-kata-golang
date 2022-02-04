@@ -77,6 +77,11 @@ func NewBowlingGame() BowlingGame {
 				availableRolls: 2,
 				resultType:     Standard,
 			},
+			{
+				scoredPins:     0,
+				availableRolls: 2,
+				resultType:     Standard,
+			},
 		},
 	}
 }
@@ -135,10 +140,6 @@ func (b *BowlingGame) shouldDoublePoints() bool {
 
 	if b.frames[b.currentFrameIndex-1].ResultType() == Spare &&
 		b.frames[b.currentFrameIndex].AvailableRolls() == 1 {
-		return true
-	}
-
-	if b.frames[b.currentFrameIndex-1].ResultType() == Strike {
 		return true
 	}
 
