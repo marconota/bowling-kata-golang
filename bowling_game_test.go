@@ -48,66 +48,92 @@ func TestBowlingGame(t *testing.T) {
 	)
 
 	t.Run(
-		"When we score a spare and then we score 2 on the next roll",
+		"GIVEN a spare is scored WHEN the next frame is rolled THEN the bonus is the score of the next roll",
 		func(t *testing.T) {
 			bowlingGame := NewBowlingGame()
 
-			if err := bowlingGame.Roll(6); err != nil {
+			firstRoll := 6
+			secondRoll := 4
+
+			if err := bowlingGame.Roll(firstRoll); err != nil {
 				t.Fail()
 			}
-			if err := bowlingGame.Roll(4); err != nil {
+			if err := bowlingGame.Roll(secondRoll); err != nil {
 				t.Fail()
 			}
-			if err := bowlingGame.Roll(2); err != nil {
+
+			firstRollAfterSpare := 2
+			secondRollAfterSpare := 3
+			if err := bowlingGame.Roll(firstRollAfterSpare); err != nil {
 				t.Fail()
 			}
-			if err := bowlingGame.Roll(3); err != nil {
+			if err := bowlingGame.Roll(secondRollAfterSpare); err != nil {
 				t.Fail()
 			}
-			if bowlingGame.Score() != 17 {
+
+			expectedBonus := firstRollAfterSpare
+
+			totalScore := firstRoll + secondRoll + firstRollAfterSpare + secondRollAfterSpare + expectedBonus
+			if bowlingGame.Score() != totalScore {
 				t.Errorf("bowling score: %d", bowlingGame.Score())
 			}
 		},
 	)
 
 	t.Run(
-		"When we score a strike and then we score 2 on the next roll",
+		"GIVEN a strike is scored WHEN the next frame is rolled THEN the bonus is the score of the next two rolls",
 		func(t *testing.T) {
 			bowlingGame := NewBowlingGame()
 
-			if err := bowlingGame.Roll(10); err != nil {
+			firstRoll := 10
+			if err := bowlingGame.Roll(firstRoll); err != nil {
 				t.Fail()
 			}
-			if err := bowlingGame.Roll(2); err != nil {
+
+			firstRollAfterStrike := 2
+			secondRollAfterStrike := 3
+			if err := bowlingGame.Roll(firstRollAfterStrike); err != nil {
 				t.Fail()
 			}
-			if err := bowlingGame.Roll(3); err != nil {
+			if err := bowlingGame.Roll(secondRollAfterStrike); err != nil {
 				t.Fail()
 			}
-			if bowlingGame.Score() != 20 {
+
+			expectedBonus := firstRollAfterStrike + secondRollAfterStrike
+			totalScore := firstRoll + firstRollAfterStrike + secondRollAfterStrike + expectedBonus
+			if bowlingGame.Score() != totalScore {
 				t.Errorf("bowling score: %d", bowlingGame.Score())
 			}
 		},
 	)
 
 	t.Run(
-		"When we score 2 consecutive strike and then we score 2 on the next roll",
+		"GIVEN a strike is scored WHEN the next frame is rolled THEN the bonus is the score of the next two rolls",
 		func(t *testing.T) {
 			bowlingGame := NewBowlingGame()
 
-			if err := bowlingGame.Roll(10); err != nil {
+			expectedFirstFrameBonus := 0
+			firstRoll := 10
+			if err := bowlingGame.Roll(firstRoll); err != nil {
 				t.Fail()
 			}
-			if err := bowlingGame.Roll(10); err != nil {
+
+			firstRollAfterStrike := 10
+			if err := bowlingGame.Roll(firstRollAfterStrike); err != nil {
 				t.Fail()
 			}
-			if err := bowlingGame.Roll(2); err != nil {
+			expectedFirstFrameBonus += firstRollAfterStrike
+
+			secondRollAfterStrike := 10
+			if err := bowlingGame.Roll(secondRollAfterStrike); err != nil {
 				t.Fail()
 			}
-			if err := bowlingGame.Roll(3); err != nil {
-				t.Fail()
-			}
-			if bowlingGame.Score() != 42 {
+			expectedSecondFrameBonus := secondRollAfterStrike
+			expectedFirstFrameBonus += secondRollAfterStrike
+
+			totalScore := firstRoll + firstRollAfterStrike + secondRollAfterStrike + expectedFirstFrameBonus +
+				expectedSecondFrameBonus
+			if bowlingGame.Score() != totalScore {
 				t.Errorf("bowling score: %d", bowlingGame.Score())
 			}
 		},
