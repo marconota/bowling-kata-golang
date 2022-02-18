@@ -86,7 +86,6 @@ func NewBowlingGame() BowlingGame {
 }
 
 func (b *BowlingGame) Roll(pins int) error {
-	rollScore := pins
 	if err := b.assertValidRoll(pins); err != nil {
 		return err
 	}
@@ -95,11 +94,9 @@ func (b *BowlingGame) Roll(pins int) error {
 	frame.DecreaseAvailableRolls()
 	frame.IncreaseScoredPins(pins)
 
-	if b.shouldDoublePoints() {
-		rollScore *= 2
-	}
+	b.applyBonus(pins)
 
-	frame.score += rollScore
+	frame.score += pins
 
 	if pins == 10 || frame.AvailableRolls() == 0 {
 		frame.Close()
@@ -137,19 +134,53 @@ func (b *BowlingGame) assertValidRoll(pins int) error {
 	return nil
 }
 
-func (b *BowlingGame) shouldDoublePoints() bool {
+//todo: please refactor me
+func (b *BowlingGame) applyBonus(rolledPins int) {
 	if b.currentFrameIndex == 0 {
-		return false
+		return
 	}
 
-	if b.frames[b.currentFrameIndex-1].ResultType() == Spare &&
-		b.frames[b.currentFrameIndex].AvailableRolls() == 1 {
-		return true
+	previousFrame := b.frames[b.currentFrameIndex-1]
+	currentFrame := b.frames[b.currentFrameIndex]
+
+	if previousFrame.ResultType() == Spare &&
+		currentFrame.AvailableRolls() == 1 {
+		previousFrame.score += rolledPins
+		return
+	}
+	/**
+
+	caso 1: sono al primo tiro del current frame e ho uno strike nel frame precedente e non ho strike nel frame -2			==> bonus frame precedente
+	caso 2: sono al secondo tiro del current frame e ho uno strike nel frame precedente			==> bonus frame precedente
+	caso 3: sono al primo tiro del current frame e non ho uno strike nel frame precedente		==> no bonus
+	caso 4: sono al secondo tiro del current frame e non ho uno strike nel frame precedente		==> no bonus
+	caso 5: sono al primo tiro del current frame e ho strike nei 2 frame precedenti				==> bonus frame precedente + bonus frame -2
+
+	*/
+
+	if previousFrame.ResultType() != Strike {
+		return
 	}
 
-	if b.frames[b.currentFrameIndex-1].ResultType() == Strike {
-		return true
+	if previousFrame.ResultType() == Strike &&
+		currentFrame.AvailableRolls() == 0 {
+		previousFrame.score += rolledPins
+		return
 	}
 
-	return false
+	if previousFrame.ResultType() == Strike &&
+		currentFrame.AvailableRolls() == 1 {
+		previousFrame.score += rolledPins
+	}
+
+	if b.currentFrameIndex == 1 {
+		return
+	}
+
+	thirdToLast := b.frames[b.currentFrameIndex-2]
+
+	if thirdToLast.ResultType() == Strike &&
+		currentFrame.AvailableRolls() == 1 {
+		thirdToLast.score += rolledPins
+	}
 }
