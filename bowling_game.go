@@ -16,7 +16,6 @@ const (
 )
 
 type BowlingGame struct {
-	score             int
 	currentFrameIndex int
 	frames            []*frame
 }
@@ -100,7 +99,8 @@ func (b *BowlingGame) Roll(pins int) error {
 		rollScore *= 2
 	}
 
-	b.score += rollScore
+	frame.score += rollScore
+
 	if pins == 10 || frame.AvailableRolls() == 0 {
 		frame.Close()
 		b.currentFrameIndex++
@@ -110,7 +110,11 @@ func (b *BowlingGame) Roll(pins int) error {
 }
 
 func (b *BowlingGame) Score() int {
-	return b.score
+	s := 0
+	for _, f := range b.frames {
+		s += f.score
+	}
+	return s
 }
 
 func (b *BowlingGame) assertValidRoll(pins int) error {
