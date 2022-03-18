@@ -178,4 +178,55 @@ func TestBowlingGame(t *testing.T) {
 			}
 		},
 	)
+
+	t.Run(
+		"WHEN we play a game of 10 frames AND we score 1 in every roll THEN the final score should be 20",
+		func(t *testing.T) {
+			bowlingGame := NewBowlingGame()
+
+			for i := 0; i < 20; i++ {
+				err := bowlingGame.Roll(1)
+				if err != nil {
+					t.Errorf("error: %s", err)
+				}
+			}
+
+			if bowlingGame.Score() != 20 {
+				t.Errorf("bowling score: %d", bowlingGame.Score())
+			}
+		},
+	)
+
+	t.Run(
+		"WHEN we play a game of 10 frames AND we score a spare in the last frame THEN we can roll 1 more time",
+		func(t *testing.T) {
+			bowlingGame := NewBowlingGame()
+
+			for i := 0; i < 18; i++ {
+				err := bowlingGame.Roll(1)
+				if err != nil {
+					t.Errorf("error: %s", err)
+				}
+			}
+
+			err := bowlingGame.Roll(4)
+			if err != nil {
+				t.Errorf("error: %s", err)
+			}
+
+			err = bowlingGame.Roll(6)
+			if err != nil {
+				t.Errorf("error: %s", err)
+			}
+
+			err = bowlingGame.Roll(1)
+			if err != nil {
+				t.Errorf("error: %s", err)
+			}
+
+			if bowlingGame.Score() != 29 {
+				t.Errorf("bowling score: %d", bowlingGame.Score())
+			}
+		},
+	)
 }

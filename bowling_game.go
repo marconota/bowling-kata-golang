@@ -63,9 +63,48 @@ func (f *frame) DecreaseAvailableRolls() {
 	f.availableRolls--
 }
 
+func (f *frame) IncreaseAvailableRolls() {
+	f.availableRolls++
+}
+
 func NewBowlingGame() BowlingGame {
 	return BowlingGame{
 		frames: []*frame{
+			{
+				scoredPins:     0,
+				availableRolls: 2,
+				resultType:     Standard,
+			},
+			{
+				scoredPins:     0,
+				availableRolls: 2,
+				resultType:     Standard,
+			},
+			{
+				scoredPins:     0,
+				availableRolls: 2,
+				resultType:     Standard,
+			},
+			{
+				scoredPins:     0,
+				availableRolls: 2,
+				resultType:     Standard,
+			},
+			{
+				scoredPins:     0,
+				availableRolls: 2,
+				resultType:     Standard,
+			},
+			{
+				scoredPins:     0,
+				availableRolls: 2,
+				resultType:     Standard,
+			},
+			{
+				scoredPins:     0,
+				availableRolls: 2,
+				resultType:     Standard,
+			},
 			{
 				scoredPins:     0,
 				availableRolls: 2,
@@ -98,9 +137,17 @@ func (b *BowlingGame) Roll(pins int) error {
 
 	frame.score += pins
 
-	if pins == 10 || frame.AvailableRolls() == 0 {
+	if (pins == 10 || frame.AvailableRolls() == 0) && b.currentFrameIndex != 9 {
 		frame.Close()
 		b.currentFrameIndex++
+	}
+
+	if b.currentFrameIndex == 9 {
+		if frame.availableRolls == 0 && frame.scoredPins == 10 {
+			frame.resultType = Spare
+			frame.IncreaseAvailableRolls()
+			frame.scoredPins = 0
+		}
 	}
 
 	return nil
