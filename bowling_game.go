@@ -155,6 +155,7 @@ func (b *BowlingGame) applyBonus(rolledPins int) {
 	caso 3: sono al primo tiro del current frame e non ho uno strike nel frame precedente		==> no bonus
 	caso 4: sono al secondo tiro del current frame e non ho uno strike nel frame precedente		==> no bonus
 	caso 5: sono al primo tiro del current frame e ho strike nei 2 frame precedenti				==> bonus frame precedente + bonus frame -2
+	caso 6: sono al secondo tiro del current frame e ho uno strike nei 2 frame precedenti		==> bonus applicato solo al frame precedente
 
 	*/
 

@@ -138,4 +138,44 @@ func TestBowlingGame(t *testing.T) {
 			}
 		},
 	)
+
+	t.Run(
+		"GIVEN two consecutive strikes scored"+
+			"WHEN the second roll of the next frame is rolled"+
+			"THEN the bonus is applied only to the second frame",
+		func(t *testing.T) {
+			bowlingGame := NewBowlingGame()
+
+			expectedFirstFrameBonus := 0
+			firstStrike := 10
+			if err := bowlingGame.Roll(firstStrike); err != nil {
+				t.Fail()
+			}
+
+			secondStrike := 10
+			if err := bowlingGame.Roll(secondStrike); err != nil {
+				t.Fail()
+			}
+			expectedFirstFrameBonus += secondStrike
+
+			firstRollAfterSecondStrike := 5
+			if err := bowlingGame.Roll(firstRollAfterSecondStrike); err != nil {
+				t.Fail()
+			}
+			expectedSecondFrameBonus := firstRollAfterSecondStrike
+			expectedFirstFrameBonus += firstRollAfterSecondStrike
+
+			secondRollAfterSecondStrike := 3
+			if err := bowlingGame.Roll(secondRollAfterSecondStrike); err != nil {
+				t.Fail()
+			}
+			expectedSecondFrameBonus += secondRollAfterSecondStrike
+
+			totalScore := firstStrike + secondStrike + firstRollAfterSecondStrike + secondRollAfterSecondStrike +
+				expectedFirstFrameBonus + expectedSecondFrameBonus
+			if bowlingGame.Score() != totalScore {
+				t.Errorf("bowling score: %d", bowlingGame.Score())
+			}
+		},
+	)
 }
